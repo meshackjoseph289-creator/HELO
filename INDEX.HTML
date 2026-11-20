@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ec4899">
+  <title>Kibabii Student Rentals</title>
+  <link rel="stylesheet" href="STYLE.CSS">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+  <header class="header" id="top">
+    <button class="menu-button" id="menuButton" aria-label="Open navigation">☰</button>
+    <a class="brand" href="#home" aria-label="Kibabii Rentals home">
+      <span class="brand-mark">K</span>
+      <span><strong>Kibabii</strong><small>STUDENT RENTALS</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a class="nav-link active" href="#home">Home</a>
+      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#services">Services</a>
+      <a class="nav-link" href="#contact">Contact</a>
+    </nav>
+    <button class="header-login" id="openAdminButton">Admin</button>
+  </header>
+
+  <aside class="sidebar" id="sidebar" aria-label="Sidebar navigation">
+    <div class="sidebar-head">
+      <span class="brand-mark">K</span>
+      <button id="closeSidebar" aria-label="Close navigation">×</button>
+    </div>
+    <nav>
+      <a class="side-link active" href="#home"><span>⌂</span> Home</a>
+      <a class="side-link" href="#about"><span>ⓘ</span> About</a>
+      <a class="side-link" href="#services"><span>▦</span> Services</a>
+      <a class="side-link" href="#contact"><span>✉</span> Contacts</a>
+      <button class="side-link" id="sideAdminButton"><span>⚙</span> Admin Page</button>
+    </nav>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <main>
+    <section class="section home-section" id="home">
+      <div class="home-content reveal">
+        <span class="eyebrow">FIND YOUR NEXT HOME</span>
+        <h1>Comfortable student living,<br><span>close to Kibabii University.</span></h1>
+        <p>Search verified hostels, compare rooms and find an affordable place that feels like home.</p>
+        <div class="home-actions">
+          <a class="button button-yellow" href="#contact">Connect <span>→</span></a>
+          <a class="button button-white" href="#services">Explore <span>→</span></a>
+        </div>
+        <div class="stats">
+          <div><strong id="hostelCount">12+</strong><span>Available Hostels</span></div>
+          <div><strong>24/7</strong><span>Student Support</span></div>
+          <div><strong>Safe</strong><span>Verified Locations</span></div>
+        </div>
+      </div>
+      <div class="home-visual reveal">
+        <div class="hero-card">
+          <div class="hero-image">🏫</div>
+          <div class="floating-card floating-one"><span>★</span><div><strong>Top rated</strong><small>Student favourite</small></div></div>
+          <div class="floating-card floating-two"><span>📍</span><div><strong>Near campus</strong><small>Easy commute</small></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about-section" id="about">
+      <div class="about-heading reveal">
+        <span class="eyebrow">ABOUT US</span>
+        <h2>A smarter way to find<br>student accommodation</h2>
+      </div>
+      <div class="about-grid">
+        <article class="about-card reveal"><span class="number">01</span><h3>Verified hostels</h3><p>We highlight trusted options around Kibabii University with clear locations and rental details.</p></article>
+        <article class="about-card reveal"><span class="number">02</span><h3>Simple search</h3><p>Filter hostels quickly by name, location and rent so you spend less time moving around campus.</p></article>
+        <article class="about-card reveal"><span class="number">03</span><h3>Student support</h3><p>Get in touch, create an account and receive help finding accommodation that suits your needs.</p></article>
+      </div>
+    </section>
+
+    <section class="section services-section" id="services">
+      <div class="section-heading reveal">
+        <span class="eyebrow">OUR SERVICES</span>
+        <h2>Find the right place for you</h2>
+      </div>
+      <div class="search-bar reveal">
+        <label>🔍 <input id="hostelSearch" type="search" placeholder="Search hostel or location..."></label>
+        <select id="priceFilter" aria-label="Filter by price">
+          <option value="all">All prices</option>
+          <option value="under4000">Under KSh 4,000</option>
+          <option value="4000to6000">KSh 4,000 - 6,000</option>
+          <option value="over6000">Above KSh 6,000</option>
+        </select>
+      </div>
+      <div class="hostel-grid" id="hostelGrid"></div>
+      <p class="no-results" id="noResults">No hostels match your search.</p>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="contact-heading reveal">
+        <span class="eyebrow">GET IN TOUCH</span>
+        <h2>Join the Kibabii community</h2>
+        <p>Create an account or sign in to save your rental journey.</p>
+      </div>
+      <div class="auth-shell reveal">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-auth="register">Register</button>
+          <button class="auth-tab" data-auth="login">Login</button>
+        </div>
+        <form class="auth-form active" id="registerForm">
+          <div class="field"><label for="registerUsername">Username</label><input id="registerUsername" type="text" required minlength="3" placeholder="Enter your username"></div>
+          <div class="field"><label for="registerEmail">Email address</label><input id="registerEmail" type="email" required placeholder="student@email.com"></div>
+          <div class="field"><label for="registerPhone">Phone number</label><input id="registerPhone" type="tel" required minlength="10" placeholder="0712 345 678"></div>
+          <div class="field"><label for="registerPassword">Password</label><input id="registerPassword" type="password" required minlength="6" placeholder="Create a password"></div>
+          <button class="button button-yellow form-button" type="submit">Create account</button>
+        </form>
+        <form class="auth-form" id="loginForm">
+          <div class="field"><label for="loginEmail">Email address</label><input id="loginEmail" type="email" required placeholder="student@email.com"></div>
+          <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" required placeholder="Enter your password"></div>
+          <button class="button button-yellow form-button" type="submit">Login</button>
+        </form>
+      </div>
+      <div class="message-shell reveal">
+        <h3>Send a message</h3>
+        <p>Leave your details and the admin will contact you.</p>
+        <form id="contactMessageForm">
+          <div class="message-fields">
+            <input id="messageName" type="text" placeholder="Your name" required minlength="3">
+            <input id="messagePhone" type="tel" placeholder="Phone number" required minlength="10">
+          </div>
+          <textarea id="messageText" rows="4" placeholder="Write your message..." required minlength="5"></textarea>
+          <button class="button button-yellow form-button" type="submit">Send Message</button>
+        </form>
+      </div>
+      <div class="social-links" aria-label="Social media links">
+        <span>Follow us</span>
+        <a class="facebook" href="https://www.facebook.com/mesh.jose.2025" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i><span>Facebook</span></a>
+        <a class="instagram" href="https://www.instagram.com/brainiac_mesh?cnvx=NmNsazZyY2R6emVh" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i><span>Instagram</span></a>
+        <a class="whatsapp" href="https://wa.me/254703273139" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span></a>
+        <a class="x-social" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X" title="X"><i class="fa-brands fa-x-twitter"></i><span>X</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand"><span class="brand-mark">K</span><strong>Kibabii Student Rentals</strong></div>
+    <p>Developed by Meshack Joseph</p>
+  </footer>
+
+  <div class="modal-backdrop" id="adminModal" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+    <div class="modal admin-modal">
+      <button class="modal-close" data-close="adminModal" aria-label="Close">×</button>
+      <h2 id="adminTitle">Admin Login</h2>
+      <form id="adminLoginForm">
+        <div class="field"><label for="adminUsername">Username</label><input id="adminUsername" type="text" required></div>
+        <div class="field"><label for="adminPassword">Password</label><input id="adminPassword" type="password" required></div>
+        <button class="button button-yellow form-button" type="submit">Sign in</button>
+      </form>
+      <div class="admin-panel" id="adminPanel">
+        <div class="admin-toolbar">
+          <h3>Admin Dashboard</h3>
+          <button class="small-button" id="adminLogout">Logout</button>
+        </div>
+        <form class="password-form" id="adminPasswordForm">
+          <h4>Change Admin Password</h4>
+          <input id="currentAdminPassword" type="password" placeholder="Current password" required>
+          <input id="newAdminPassword" type="password" placeholder="New password" minlength="6" required>
+          <input id="confirmAdminPassword" type="password" placeholder="Confirm new password" minlength="6" required>
+          <button class="small-button" type="submit">Update Password</button>
+        </form>
+        <form class="hostel-form" id="hostelForm">
+          <input type="hidden" id="editingHostelId">
+          <input id="hostelName" type="text" placeholder="Hostel name" required>
+          <input id="hostelLocation" type="text" placeholder="Location" required>
+          <input id="hostelPrice" type="number" placeholder="Monthly rent" required>
+          <input id="hostelImage" type="text" placeholder="Emoji or image URL">
+          <button class="small-button" type="submit">Save Hostel</button>
+        </form>
+        <div class="admin-lists">
+          <div><h4>Hostels</h4><div id="adminHostelList"></div></div>
+          <div><h4>User accounts</h4><div id="adminUserList"></div></div>
+          <div class="message-inbox"><h4>Student messages</h4><div id="adminMessageList"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastIcon">✓</span><span id="toastText">Success</span></div>
+  <script src="INDEX.JS"></script>
+</body>
+</html>
