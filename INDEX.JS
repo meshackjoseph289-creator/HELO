@@ -17,6 +17,7 @@ let hostels = getData('kibabiiHostels', defaultHostels);
 let users = getData('kibabiiUsers', []);
 let adminPassword = localStorage.getItem('kibabiiAdminPassword') || 'admin123';
 let messages = getData('kibabiiMessages', []);
+let enquiries = getData('kibabiiEnquiries', []);
 
 function isImage(value) {
   return /^https?:\/\//i.test(value) || /^data:image/i.test(value);
@@ -135,6 +136,7 @@ document.getElementById('adminLoginForm').addEventListener('submit', event => {
   renderAdminHostels();
   renderAdminUsers();
   renderAdminMessages();
+  renderAdminEnquiries();
   showToast('Admin login successful.');
 });
 
@@ -154,10 +156,22 @@ function renderAdminHostels() {
 }
 
 function renderAdminUsers() {
-  document.getElementById('adminUserList').innerHTML = users.map(user => `
-    <div class="admin-item"><strong>${escapeHtml(user.username)}</strong><br>${escapeHtml(user.email)}
-      <button data-delete-user="${user.id}" title="Delete account">×</button>
-    </div>`).join('') || '<p>No accounts</p>';
+  const search = document.getElementById('accountSearch')?.value.trim().toLowerCase() || '';
+  const filteredUsers = users.filter(user =>
+    `${user.username} ${user.email} ${user.phone || ''}`.toLowerCase().includes(search)
+  );
+
+  document.getElementById('accountCount').textContent = users.length;
+  document.getElementById('adminUserList').innerHTML = filteredUsers.map(user => `
+    <div class="admin-item account-item">
+      <div class="account-avatar">${escapeHtml(user.username).charAt(0).toUpperCase()}</div>
+      <div class="account-details">
+        <strong>${escapeHtml(user.username)}</strong>
+        <a href="mailto:${escapeHtml(user.email)}">✉ ${escapeHtml(user.email)}</a>
+        ${user.phone ? `<a href="tel:${escapeHtml(user.phone)}">📞 ${escapeHtml(user.phone)}</a>` : ''}
+      </div>
+      <button class="account-delete" data-delete-user="${user.id}" title="Delete account">×</button>
+    </div>`).join('') || '<p class="empty-list">No matching student accounts</p>';
 }
 
 function cleanPhone(phone) {
@@ -167,6 +181,7 @@ function cleanPhone(phone) {
 function renderAdminMessages() {
   const list = document.getElementById('adminMessageList');
   if (!list) return;
+  document.getElementById('messageCount').textContent = messages.length;
   list.innerHTML = messages.map(item => `
     <div class="admin-item message-item">
       <strong>${escapeHtml(item.name)}</strong>
@@ -175,7 +190,27 @@ function renderAdminMessages() {
       <p>${escapeHtml(item.text)}</p>
       <small>${escapeHtml(item.date)}</small>
       <button data-delete-message="${item.id}" title="Delete message">×</button>
-    </div>`).join('') || '<p>No student messages</p>';
+    </div>`).join('') || '<p class="empty-list">No student messages</p>';
+}
+
+function renderAdminEnquiries() {
+  const list = document.getElementById('adminEnquiryList');
+  if (!list) return;
+  document.getElementById('enquiryCount').textContent = enquiries.length;
+  list.innerHTML = enquiries.map(item => {
+    const hostel = hostels.find(entry => entry.id === item.hostelId);
+    return `
+      <div class="admin-item enquiry-item">
+        <div class="enquiry-icon">${escapeHtml(item.hostelImage || '🏠')}</div>
+        <div class="enquiry-details">
+          <strong>${escapeHtml(item.hostelName)}</strong>
+          <span>${hostel ? escapeHtml(hostel.location) : 'Hostel location unavailable'}</span>
+          ${hostel ? `<b>KSh ${Number(hostel.price).toLocaleString()} / month</b>` : ''}
+          <small>${escapeHtml(item.date)}</small>
+        </div>
+        <button data-delete-enquiry="${item.id}" title="Remove enquiry">×</button>
+      </div>`;
+  }).join('') || '<p class="empty-list">No hostel enquiries yet</p>';
 }
 
 document.getElementById('hostelForm').addEventListener('submit', event => {
@@ -266,6 +301,15 @@ document.getElementById('contactMessageForm').addEventListener('submit', event =
   showToast('Message sent successfully. The admin can call you.');
 });
 
+document.getElementById('adminEnquiryList').addEventListener('click', event => {
+  const id = event.target.dataset.deleteEnquiry;
+  if (!id) return;
+  enquiries = enquiries.filter(item => item.id !== Number(id));
+  setData('kibabiiEnquiries', enquiries);
+  renderAdminEnquiries();
+  showToast('Enquiry removed.');
+});
+
 renderHostels();
 
 const sections = [...document.querySelectorAll('.section')];
@@ -293,15 +337,32 @@ document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(e
 document.getElementById('hostelGrid').addEventListener('click', event => {
   const button = event.target.closest('.contact-hostel');
   if (!button) return;
+  const hostel = hostels.find(item => item.name === button.dataset.hostel);
+  if (hostel) {
+    enquiries.unshift({
+      id: Date.now(),
+      hostelId: hostel.id,
+      hostelName: hostel.name,
+      hostelImage: hostel.image,
+      date: new Date().toLocaleString()
+    });
+    setData('kibabiiEnquiries', enquiries);
+    renderAdminEnquiries();
+  }
   document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
   showToast(`Enquiry started for ${button.dataset.hostel}.`);
 });
 
-document.getElementById('adminMessageList').addEventListener('click', event => {
-  const id = event.target.dataset.deleteMessage;
-  if (!id) return;
-  messages = messages.filter(item => item.id !== Number(id));
-  setData('kibabiiMessages', messages);
-  renderAdminMessages();
-  showToast('Message deleted.');
+document.querySelectorAll('[data-admin-tab]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('[data-admin-tab]').forEach(item => {
+      item.classList.remove('active');
+      item.setAttribute('aria-selected', 'false');
+    });
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    document.getElementById('adminMessagesPane').classList.toggle('active', tab.dataset.adminTab === 'messages');
+    document.getElementById('adminAccountsPane').classList.toggle('active', tab.dataset.adminTab === 'accounts');
+    document.getElementById('adminEnquiriesPane').classList.toggle('active', tab.dataset.adminTab === 'enquiries');
+  });
 });

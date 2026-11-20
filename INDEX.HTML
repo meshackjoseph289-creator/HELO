@@ -176,8 +176,23 @@
         </form>
         <div class="admin-lists">
           <div><h4>Hostels</h4><div id="adminHostelList"></div></div>
-          <div><h4>User accounts</h4><div id="adminUserList"></div></div>
-          <div class="message-inbox"><h4>Student messages</h4><div id="adminMessageList"></div></div>
+          <div class="message-inbox">
+            <div class="admin-inbox-tabs" role="tablist" aria-label="Admin inbox">
+              <button class="admin-inbox-tab active" type="button" data-admin-tab="messages" role="tab" aria-selected="true">Student Messages <span id="messageCount">0</span></button>
+              <button class="admin-inbox-tab" type="button" data-admin-tab="accounts" role="tab" aria-selected="false">Student Accounts <span id="accountCount">0</span></button>
+              <button class="admin-inbox-tab" type="button" data-admin-tab="enquiries" role="tab" aria-selected="false">Enquired Hostels <span id="enquiryCount">0</span></button>
+            </div>
+            <div class="admin-inbox-content active" id="adminMessagesPane" role="tabpanel">
+              <div id="adminMessageList"></div>
+            </div>
+            <div class="admin-inbox-content" id="adminAccountsPane" role="tabpanel">
+              <input class="account-search" id="accountSearch" type="search" placeholder="Search student name, email or phone..." aria-label="Search student accounts">
+              <div id="adminUserList"></div>
+            </div>
+            <div class="admin-inbox-content" id="adminEnquiriesPane" role="tabpanel">
+              <div id="adminEnquiryList"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
